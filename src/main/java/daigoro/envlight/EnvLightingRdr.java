@@ -22,12 +22,12 @@ public class EnvLightingRdr implements Renderer {
 
 	private boolean mUseChr = !true;
 
-	private boolean mUseDistLight = !false;
+	private boolean mUseDistLight = true;
 	private boolean mUseDistLightClr = true;
 
 	private boolean mUseTonemap = true;
 
-	private boolean mUseExposure = !false;
+	private boolean mUseExposure = true;
 	private boolean mAutoExposure = true;
 
 	private boolean mUseSpecVclr = true;
@@ -94,8 +94,8 @@ public class EnvLightingRdr implements Renderer {
 	private DrawState mEnvDrawState;
 	private AttrLink mEnvAttrLink;
 	private EnvCmdCall mEnvCmdCall;
-	protected float[] mEnvCullingBoxes;
-	protected int[] mEnvCullingBits;
+	private float[] mEnvCullingBoxes;
+	private int[] mEnvCullingBits;
 
 	private XGeo mObjGeo;
 	private GLGeoData mObjMdl;
@@ -106,14 +106,15 @@ public class EnvLightingRdr implements Renderer {
 
 	private TexLib mChrTexLib;
 	private GLGeoData mChrMdl;
-	protected AnimRig mChrRig;
-	protected AnimRig.MotList mChrMotList;
+	private AnimRig mChrRig;
+	private Vec mChrGeoCenter;
+	private AnimRig.MotList mChrMotList;
 	private int mChrFrame = 0;
-	protected float[] mChrSkinXforms;
+	private float[] mChrSkinXforms;
 	private DrawState mChrDrawState;
 	private AttrLink mChrAttrLink;
 	private ChrCmdCall mChrCmdCall;
-	protected int[] mChrBatTexMap;
+	private int[] mChrBatTexMap;
 
 	private FPSInfo mFPSInfo = new FPSInfo();
 
@@ -136,7 +137,7 @@ public class EnvLightingRdr implements Renderer {
 				R.raw.pano_test8
 		};
 		int panoSel = (int)((System.currentTimeMillis() >>> 4) & 0xFF);
-		//panoSel = 7;//////////////
+		//panoSel = 0;//////////////
 		int panoIdx = panoSel % panos.length;
 		int panoRID = panos[panoIdx];
 		mPanoTex = TestUtil.loadTex(mCtx, panoRID);
@@ -400,6 +401,7 @@ public class EnvLightingRdr implements Renderer {
 		mChrTexLib.init(texs);
 		mChrRig = new AnimRig();
 		mChrRig.init(rig);
+		mChrGeoCenter = geo.mBBox.getCenter();
 		GeoCfg cfg = new GeoCfg();
 		cfg.mBatchGrpPrefix = "xbat_";
 		cfg.mIsSharedVB = false;
@@ -531,7 +533,14 @@ public class EnvLightingRdr implements Renderer {
 	}
 
 	private void ctrlCamOrbit() {
-		Vec tgt = mUseChr ? new Vec(0.0f, 1.3f, 0.0f) : new Vec(0.0f, 0.0f, 0.0f);
+		float tgty = 0.0f;
+		if (mUseChr) {
+			tgty = 1.3f;
+			if (mChrGeoCenter.y() >= 0.85f) {
+				tgty += 0.12f;
+			}
+		}
+		Vec tgt = new Vec(0.0f, tgty, 0.0f);
 
 		int frm = mFrameCount;
 		float dy = frm;
