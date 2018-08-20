@@ -798,7 +798,8 @@ public final class Calc {
 	}
 
 	public static float fit(float val, float oldMin, float oldMax, float newMin, float newMax) {
-		float rel = (val - oldMin) / (oldMax - oldMin);
+		float rel = div0(val - oldMin, oldMax - oldMin);
+		rel = saturate(rel);
 		return lerp(newMin, newMax, rel);
 	}
 
