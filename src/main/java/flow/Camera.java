@@ -162,7 +162,7 @@ public class Camera {
 	}
 
 	public void putAllGP(CmdList cmd) {
-		putMtxGP(cmd,"CAMERA.view", mViewMtx);
+		putMtxGP(cmd, "CAMERA.view", mViewMtx);
 		putMtxGP(cmd, "CAMERA.proj", mProjMtx);
 		putMtxGP(cmd, "CAMERA.viewProj", mViewProjMtx);
 		putMtxGP(cmd, "CAMERA.invView", mInvViewMtx);
