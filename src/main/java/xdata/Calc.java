@@ -86,9 +86,9 @@ public final class Calc {
 			mag = m;
 		} else if (m > 0.0f) {
 			float r = 1.0f / m;
-			float d = ipowf(v[0] * r, p);
+			float d = ipowf(Math.abs(v[0]) * r, p);
 			for (int i = 1; i < n; ++i) {
-				d += ipowf(v[i] * r, p);
+				d += ipowf(Math.abs(v[i]) * r, p);
 			}
 			mag = powf(d, 1.0f / (float)p) * m;
 		}
