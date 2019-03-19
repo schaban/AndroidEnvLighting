@@ -20,7 +20,7 @@ import flow.*;
 
 public class EnvLightingRdr implements Renderer {
 
-	private boolean mUseChr = !true;
+	private boolean mUseChr = true;
 
 	private boolean mUseDistLight = true;
 	private boolean mUseDistLightClr = true;
@@ -99,6 +99,7 @@ public class EnvLightingRdr implements Renderer {
 
 	private XGeo mObjGeo;
 	private GLGeoData mObjMdl;
+	private Vec mObjGeoCenter;
 	private Mtx mObjWorld;
 	private DrawState mObjDrawState;
 	private AttrLink mObjAttrLink;
@@ -317,6 +318,7 @@ public class EnvLightingRdr implements Renderer {
 		if (mObjGeo == null) return;
 		if (!mObjGeo.isAllTris()) return;
 
+		mObjGeoCenter = mObjGeo.mBBox.getCenter();
 		GLGeoData gd = new GLGeoData();
 		GeoCfg cfg = new GeoCfg();
 		cfg.mPackLevel = 2;
@@ -539,6 +541,8 @@ public class EnvLightingRdr implements Renderer {
 			if (mChrGeoCenter.y() >= 0.85f) {
 				tgty += 0.12f;
 			}
+		} else {
+			tgty = mObjGeoCenter.y();
 		}
 		Vec tgt = new Vec(0.0f, tgty, 0.0f);
 
